@@ -81,9 +81,7 @@ public class RentaToolController {
 			if (discount.compareTo(new BigDecimal(0)) == -1 //Equivalent to discount < 0
 					|| discount.compareTo(new BigDecimal(100)) == 1 //Equivalent to discount > 100
 					) {
-				System.out.println("\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-				System.out.println("x Error:  x");
-				System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n");
+	
 				//The design document specified that this error be thrown as an exception
 				throw new InvaildDiscountPercentException(	  "\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 															+ "\nx Error: Please enter a number between 0 and 100 for Discount Percent x"
