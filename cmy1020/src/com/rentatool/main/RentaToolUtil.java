@@ -35,6 +35,13 @@ public class RentaToolUtil {
 		
 		//Independence Day
 		LocalDate independenceDay = LocalDate.of(dayToCheck.getYear(), 7, 4);
+		//If falls on weekend, it is observed on the closest weekday (if Sat, then Friday before, if Sunday, then Monday after)
+		if (independenceDay.getDayOfWeek().equals(DayOfWeek.SATURDAY)) {
+			independenceDay = independenceDay.minusDays(1);
+		
+		} else if (independenceDay.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+			independenceDay = independenceDay.plusDays(1);
+		}
 				
 		//Labor Day
 		LocalDate laborDay = LocalDate.of(dayToCheck.getYear(), 9, 1); //Set to the first day of Sept.
