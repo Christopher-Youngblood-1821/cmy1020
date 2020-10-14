@@ -94,30 +94,41 @@ public class RentaToolService {
 	public Integer calculateChargableDays(Tool selectedTool, RentalAgreement newRentalAgreement){
 		Integer chargeDays = newRentalAgreement.getRentalDays();
 		LocalDate dayToCheck = newRentalAgreement.getCheckoutDate();
-		
+
 		//as specified by the design document, "from day *after* checkout
 		dayToCheck = dayToCheck.plusDays(1);
 		
 		//Iterate through the days following the initial checkout date
 		for (Integer i = 0; i < newRentalAgreement.getRentalDays(); i++) {
+			
+			//Used to track and make sure that the customer can't get double discounts if a holiday
+			//	falls on a weekend, etc.
+			boolean chargedToday = true;
+			
 			if (!selectedTool.isWeekdayCharge()
 					&& !(dayToCheck.getDayOfWeek().equals(DayOfWeek.SATURDAY)
-							|| dayToCheck.getDayOfWeek().equals(DayOfWeek.SUNDAY))) {
+							|| dayToCheck.getDayOfWeek().equals(DayOfWeek.SUNDAY))
+					&& chargedToday) {
 				//If we don't charge for weekdays and it's Sat or Sun
 				chargeDays -= 1;
+				chargedToday = false;
 			}
 			
 			if (!selectedTool.isWeekendCharge()
 					&& (dayToCheck.getDayOfWeek().equals(DayOfWeek.SATURDAY)
-							|| dayToCheck.getDayOfWeek().equals(DayOfWeek.SUNDAY))) {
+							|| dayToCheck.getDayOfWeek().equals(DayOfWeek.SUNDAY))
+					&& chargedToday) {
 				//If we don't charge for weekends and it's Sat or Sun
 				chargeDays -= 1;
+				chargedToday = false;
 			}
 			
 			if (!selectedTool.isHolidayCharge()
-					&& rentaToolUtil.checkForHoliday(dayToCheck)) {
+					&& rentaToolUtil.checkForHoliday(dayToCheck)
+					&& chargedToday) {
 				//If we don't charge for holidays and it is a holiday
 				chargeDays -= 1;
+				chargedToday = false;
 			}
 			
 			dayToCheck = dayToCheck.plusDays(1);
